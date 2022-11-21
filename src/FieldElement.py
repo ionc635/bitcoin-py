@@ -36,9 +36,15 @@ class FieldElement:
             num = self.prime - num
 
         return self.__class__(num, self.prime)
+    
+    def __mul__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot mul two numbers in different Fields')
+        num = (self.num * other.num) % self.prime
+        return self.__class__(num, self.prime)
 
 class FieldElementTest(unittest.TestCase):
-    def test_add1(self):
+    def test_add(self):
         a = FieldElement(44, 57)
         b = FieldElement(33, 57)
         self.assertEqual(a + b, FieldElement(20, 57))
@@ -55,3 +61,14 @@ class FieldElementTest(unittest.TestCase):
         d = FieldElement(30, 57)
         e = FieldElement(38, 57)
         self.assertEqual(c - d - e, FieldElement(41, 57))
+
+    def test_mul(self):
+        a = FieldElement(95, 97)
+        b = FieldElement(45, 97)
+        c = FieldElement(31, 97)
+        self.assertEqual(a * b * c, FieldElement(23, 97))
+        d = FieldElement(17, 97)
+        e = FieldElement(13, 97)
+        f = FieldElement(19, 97)
+        g = FieldElement(44, 97)
+        self.assertEqual(d * e * f * g, FieldElement(23, 68))
