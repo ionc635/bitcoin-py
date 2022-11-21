@@ -44,8 +44,16 @@ class FieldElement:
         return self.__class__(num, self.prime)
     
     def __pow__(self, exponent):
-        num = pow(self.num, exponent, self.prime)
+        n = exponent % (self.prime - 1)
+        num = pow(self.num, n, self.prime)
         return self.__class__(num, self.prime)
+
+    def __truediv__(self, other):
+        if self.prime != other.prime:
+            raise TypeError('Cannot truediv two numbers in different Fields')
+        num = self.num * (other.num ** (self.prime - 2)) % self.prime
+        return self.__class__(num, self.prime)
+
 
 class FieldElementTest(unittest.TestCase):
     def test_add(self):
@@ -76,3 +84,11 @@ class FieldElementTest(unittest.TestCase):
         f = FieldElement(19, 97)
         g = FieldElement(44, 97)
         self.assertEqual(d * e * f * g, FieldElement(68, 97))
+
+    def test_truediv(self):
+        a = FieldElement(3, 31)
+        b = FieldElement(24, 31)
+        self.assertEqual(a / b, FieldElement(4, 31))
+        c = FieldElement(4, 31)
+        d = FieldElement(11, 31)
+        self.assertEqual(a ** -4 * d, FieldElement(12, 31))
