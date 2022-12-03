@@ -1,5 +1,3 @@
-import unittest
-
 class FieldElement:
     def __init__(self, num, prime):
         if num >= prime or num < 0:
@@ -51,5 +49,9 @@ class FieldElement:
     def __truediv__(self, other):
         if self.prime != other.prime:
             raise TypeError('Cannot truediv two numbers in different Fields')
-        num = self.num * (other.num ** (self.prime - 2)) % self.prime
+        num = (self.num * pow(other.num, self.prime - 2, self.prime)) % self.prime
+        return self.__class__(num, self.prime)
+
+    def __rmul__(self, coefficient):
+        num = (self.num * coefficient) % self.prime
         return self.__class__(num, self.prime)
