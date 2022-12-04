@@ -1,4 +1,4 @@
-from ..FieldElement.FieldElement import FieldElement
+from ..FieldElement import FieldElement
 
 class Point:
     def __init__(self, x, y, a, b):
@@ -64,4 +64,3 @@ class Point:
             cur += cur
             coef >>= 1
         return result
-        

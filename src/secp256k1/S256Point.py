@@ -14,6 +14,17 @@ class S256Point(Point):
         else:
             super().__init__(x = x, y = y, a = a, b = b)
 
-    def __mul__(self, coefficient):
+    def __rmul__(self, coefficient):
         coef = coefficient % N
         return super().__mul__(coef)
+
+    def verify(self, z, sig):
+        s_inv = pow(sig.s, N - 2, N)
+        u = z * s_inv % N
+        v = sig.r * s_inv % N
+        total = u * G + v * self
+        return total.x.num == sig.r
+
+G = S256Point(  
+    0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798,
+    0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8)
