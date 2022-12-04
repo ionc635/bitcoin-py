@@ -56,7 +56,7 @@ class Point:
     
     def __mul__(self, coefficient):
         coef = coefficient
-        cur = self
+        cur = self 
         result = self.__class__(None, None, self.a, self.b)
         while coef:
             if coef & 1:
@@ -64,3 +64,4 @@ class Point:
             cur += cur
             coef >>= 1
         return result
+        
