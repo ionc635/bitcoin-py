@@ -1,6 +1,8 @@
 from .S256Field import S256Field
 from .S256Point import S256Point, N, G
 from .Signature import Signature
+from ..helper.helper import hash256
+from .PrivateKey import PrivateKey
 import unittest
 
 class secp256k1(unittest.TestCase):
@@ -20,4 +22,13 @@ class secp256k1(unittest.TestCase):
         r = 0xeff69ef2b1bd93a66ed5219add4fb51e11a840f404876325a1e8ffe0529a2c
         s = 0xc7207fee197d27c618aea621406f6bf5ef6fca38681d82b2f06fddbdce6feab6
         self.assertTrue(point.verify(z, Signature(r, s)))
+
+    def test_sign(self):
+        e = 12345
+        z = int.from_bytes(hash256('Programming Bitcoin!'.encode('utf-8')), 'big')
+
+        pk = PrivateKey(e)
+        sig = pk.sign(z)
+        self.assertTrue(pk.point.verify(z, sig))
+
 
