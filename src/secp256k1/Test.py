@@ -31,4 +31,21 @@ class secp256k1(unittest.TestCase):
         sig = pk.sign(z)
         self.assertTrue(pk.point.verify(z, sig))
 
+    def test_sec(self):
+        pk1 = PrivateKey(5000)
+        pk2 = PrivateKey(2018 ** 5)
+        pk3 = PrivateKey(0xdeadbeef12345)
+
+        print(pk1.point.sec(False))
+        print(pk2.point.sec(False))
+        print(pk3.point.sec(False))
+
+        pk4 = PrivateKey(5001)
+        pk5 = PrivateKey(2019 ** 5)
+        pk6 = PrivateKey(0xdeadbeef54321)
+
+        print(pk4.point.sec(True))
+        print(pk5.point.sec(True))
+        print(pk6.point.sec(True))
+
 
