@@ -54,3 +54,12 @@ class secp256k1(unittest.TestCase):
 
         sig = Signature(r, s)
         print('test_der', sig.der())
+
+    def test_address(self):
+        pk1 = PrivateKey(5002)
+        pk2 = PrivateKey(2020 ** 5)
+        pk3 = PrivateKey(0x12345deadbeef)
+
+        print(pk1.point.address(False, False))
+        print(pk2.point.address(True, False))
+        print(pk3.point.address(True, True))
