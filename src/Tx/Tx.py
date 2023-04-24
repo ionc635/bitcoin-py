@@ -7,12 +7,13 @@ from ..helper.helper import (
 )
 
 class Tx:
-    def __init__(self, version, tx_ins, tx_outs, locktime, testnet = False)
+    def __init__(self, version, tx_ins, tx_outs, locktime, testnet = False):
         self.version = version
         self.tx_ins = tx_ins
         self.tx_outs = tx_outs
         self.locktime = locktime
         self.testnet = testnet
+
     
     def __repr__(self):
         tx_ins = ''
@@ -70,6 +71,7 @@ class Tx:
         for _ in range(num_inputs):
             inputs.append(TxIn.parse(s))
         # num_ouputs is a varint, use read_varint(s)
+        num_outputs = read_varint(s)
         outputs = []
         for _ in range(num_outputs):
             outputs.append(TxOut.parse(s))
@@ -77,4 +79,10 @@ class Tx:
         locktime = little_endian_to_int(s.read(4))
         return cls(version, inputs, outputs, locktime, testnet = testnet)
 
-
+    def fee(self):
+        input_sum, output_sum = 0
+        for tx_in in self.tx_ins:
+            input_sum += tx_in.value(self.testnet)
+        for tx_out in self.tx_outs:
+            output_sum += tx_out.amount
+        return input_sum - output_sum
